@@ -1,51 +1,28 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import { WordList } from "./wordlist";
+import { useState } from "react";
+import { useStore } from "./stores/store";
+import { GuessResult } from "./stores/wordStore";
 
 function App() {
-    const [guesses, setGuesses] = useState<string[]>([]); //"width", "star", "apple", "thus"]);
+
     const [guess, setGuess] = useState("");
     const [message, setMessage] = useState("");
-    //const [submittedGuess, setSubmittedGuess] = useState("");
-    const [solution, _setSolution] = useState(WordList[randomIntFromInterval(0, WordList.length - 1)]);
 
-    const [preGuesses, setPreGuesses] = useState<string[]>([]);
-    const [postGuesses, setPostGuesses] = useState<string[]>([]);
-
-    //const preGuesses2 = guesses.filter((x) => x < submittedGuess).sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
-
-    useEffect(() => {
-        setPreGuesses(guesses.filter((x) => x < solution).sort((a, b) => a < b ? -1 : a > b ? 1 : 0));
-        setPostGuesses(guesses.filter((x) => x > solution).sort((a, b) => a < b ? -1 : a > b ? 1 : 0));
-    }, [guesses]);
-
-    // https://stackoverflow.com/a/7228322
-    function randomIntFromInterval(min: number, max: number) {
-        // min and max included
-        return Math.floor(Math.random() * (max - min + 1) + min);
-    }
+    let { wordStore: store } = useStore();
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
-            setMessage("");
-            if (guesses.includes(guess)) {
-                setGuess("");
-                return;
+            setMessage('');
+
+            switch (store.makeGuess(guess)) {
+                case GuessResult.Correct:
+                    setMessage(`You win! You took ${store.guesses.length} guesses.`)
+                    break;
+                case GuessResult.InvalidWord:
+                    setMessage('Word not in list');
             }
-            if (WordList.includes(guess)) {
 
-                setGuesses([guess, ...guesses]);
-
-                //setSubmittedGuess(guess);
-
-                if (guess === solution) {
-                    setMessage(`You win! You took ${guesses.length+1} guesses.`)
-                }
-
-                setGuess("");
-            } else {
-                setMessage("Word not in list");
-            }
+            setGuess('');
         }
     };
 
@@ -53,7 +30,7 @@ function App() {
         <>
             <h1>Guess the Word</h1>
             <div className="card">
-                {preGuesses.map((x) => {
+                {store.preGuesses.map((x) => {
                     return <p key={`word-${x}`}>{x}</p>;
                 })}
                 <p>
@@ -66,10 +43,10 @@ function App() {
                     />
                 </p>
                 <p>{message}</p>
-                {postGuesses.map((x) => {
+                {store.postGuesses.map((x) => {
                     return <p key={`word-${x}`}>{x}</p>;
                 })}
-                <p>Guess count: {guesses.length}</p>
+                <p>Guess count: {store.guesses.length}</p>
             </div>
         </>
     );

@@ -35,20 +35,20 @@ export default class GameStore {
     }
 
     makeGuess(guess: string): GuessResult {
-        if (this.guesses.includes(guess)) {
+        if (this.guesses.includes(guess))
             return GuessResult.Incorrect;
-        }
 
         if (WordList.includes(guess)) {
             this.guesses.push(guess);
-            if (guess === this.solution) {
-                return GuessResult.Correct;
-            }
-        } else {
-            return GuessResult.InvalidWord;
-        }
 
-        return GuessResult.Incorrect;
+            if (guess === this.solution)
+                return GuessResult.Correct;
+            else
+                return GuessResult.Incorrect;
+
+        } else
+            return GuessResult.InvalidWord;
+
     }
 
     // https://stackoverflow.com/a/7228322

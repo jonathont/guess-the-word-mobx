@@ -3,14 +3,14 @@ import { useState } from "react";
 import { observer } from "mobx-react-lite";
 
 import { useStore } from "./stores/store";
-import { GuessResult } from "./stores/gameStore";
+import GameStore, { GuessResult } from "./stores/gameStore";
 
 function App() {
 
     const [guess, setGuess] = useState("");
     const [message, setMessage] = useState("");
 
-    let { gameStore: store } = useStore();
+    let { gameStore: store }: { gameStore: GameStore } = useStore();
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {

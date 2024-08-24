@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
-import WordStore from "./wordStore";
+import GameStore from "./gameStore";
 
 interface Store {
-    wordStore: WordStore;
+    gameStore: GameStore;
 }
 
 export const store: Store = {
-    wordStore: new WordStore()
+    gameStore: new GameStore()
 }
 
 export const StoreContext = createContext(store);

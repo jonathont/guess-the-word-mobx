@@ -7,7 +7,7 @@ export enum GuessResult {
     InvalidWord    
 }
 
-export default class WordStore {
+export default class GameStore {
 
     solution: string = '';
     guesses: string[] = [];

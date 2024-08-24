@@ -10,8 +10,6 @@ export enum GuessResult {
 export default class WordStore {
 
     solution: string = '';
-    
-    guess: string = '';
     guesses: string[] = [];
 
     constructor() {
@@ -22,7 +20,6 @@ export default class WordStore {
         // Explicit way to set up observables (instead of using makeAutoObservable):
         // makeObservable(this, {
         //     solution: observable,
-        //     guess: observable,
         //     guesses: observable,
         //     preGuesses: computed,
         //     postGuesses: computed
@@ -39,7 +36,6 @@ export default class WordStore {
 
     makeGuess(guess: string): GuessResult {
         if (this.guesses.includes(guess)) {
-            this.guess = '';
             return GuessResult.Incorrect;
         }
 
@@ -48,8 +44,6 @@ export default class WordStore {
             if (guess === this.solution) {
                 return GuessResult.Correct;
             }
-
-            this.guess = '';
         } else {
             return GuessResult.InvalidWord;
         }
